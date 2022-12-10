@@ -17,7 +17,7 @@ services:
 
   graphql-engine-auth:
     container_name: auth_graphql
-    image: hasura/graphql-engine:v2.13.0.cli-migrations-v3
+    image: hasura/graphql-engine:latest.cli-migrations-v3
     ports:
       - '8080:8080'
     depends_on:
