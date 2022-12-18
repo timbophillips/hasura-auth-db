@@ -27,7 +27,7 @@ services:
       - ./hasura/migrations:/hasura-migrations
       - ./hasura/metadata:/hasura-metadata
     env_file:
-      - docker.env
+      - .env
     extra_hosts:
       - host.docker.internal:host-gateway
 
