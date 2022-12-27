@@ -4,8 +4,6 @@ DELETE FROM "public"."groups" WHERE "id" = 2;
 
 DELETE FROM "public"."groups" WHERE "id" = 1;
 
-alter table "public"."users" drop constraint "users_group_fkey";
-
 -- Could not auto-generate a down migration.
 -- Please write an appropriate down migration for the SQL below:
 -- alter table "public"."users" add column "group" Integer

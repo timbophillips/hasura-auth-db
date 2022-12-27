@@ -1,7 +1,3 @@
 table:
   name: refresh_tokens
   schema: public
-object_relationships:
-  - name: userByUser
-    using:
-      foreign_key_constraint_on: user

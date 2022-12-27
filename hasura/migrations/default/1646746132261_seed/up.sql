@@ -12,25 +12,6 @@ CREATE TABLE public.users (
     "group" text DEFAULT '' :: text
 );
 
-CREATE VIEW public.online_users AS
-SELECT
-    users.id,
-    users.last_seen,
-    users.username
-FROM
-    public.users
-WHERE
-    (
-        users.last_seen >= (now() - '00:00:30' :: interval)
-    );
-
-CREATE TABLE public.refresh_tokens (
-    token text NOT NULL,
-    "user" integer NOT NULL,
-    expires timestamp with time zone NOT NULL,
-    ip text NOT NULL
-);
-
 CREATE SEQUENCE public.users_id_seq AS integer START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
 
 ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
@@ -41,6 +22,28 @@ ALTER COLUMN
     id
 SET
     DEFAULT nextval('public.users_id_seq' :: regclass);
+
+ALTER TABLE
+    ONLY public.users
+ADD
+    CONSTRAINT users_pkey PRIMARY KEY (id);
+
+ALTER TABLE
+    ONLY public.users
+ADD
+    CONSTRAINT users_username_key UNIQUE (username);
+
+CREATE TABLE public.refresh_tokens (
+    token text NOT NULL,
+    "user" integer NOT NULL,
+    expires timestamp with time zone NOT NULL,
+    ip text NOT NULL
+);
+
+ALTER TABLE
+    ONLY public.refresh_tokens
+ADD
+    CONSTRAINT refresh_tokens_pkey PRIMARY KEY (token);
 
 INSERT INTO
     public.users (
@@ -133,26 +136,3 @@ VALUES
         NULL,
         'rewardchart'
     );
-
-SELECT
-    pg_catalog.setval('public.users_id_seq', 4, true);
-
-ALTER TABLE
-    ONLY public.refresh_tokens
-ADD
-    CONSTRAINT refresh_tokens_pkey PRIMARY KEY (token);
-
-ALTER TABLE
-    ONLY public.users
-ADD
-    CONSTRAINT users_pkey PRIMARY KEY (id);
-
-ALTER TABLE
-    ONLY public.users
-ADD
-    CONSTRAINT users_username_key UNIQUE (username);
-
-ALTER TABLE
-    ONLY public.refresh_tokens
-ADD
-    CONSTRAINT refresh_tokens_user_fkey FOREIGN KEY ("user") REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
